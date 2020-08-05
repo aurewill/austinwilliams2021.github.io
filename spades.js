@@ -505,7 +505,7 @@ function game(game_dict)
 
         // Player 1 follows
         cardTwo = prompt(`Your turn to play a card, Comp: ${cardOne}`);
-        while (cardTwo === "") {
+        while (cardTwo === "" || game_dict["p1"].indexOf(cardTwo) === -1) {
             cardTwo = prompt(`Please enter a card in your hand, Comp: ${cardOne}`);
         }
         let lead_suit = cardOne.charAt(0);
@@ -672,7 +672,6 @@ function bid(bid_dict)
     }
 
     if (bid_dict["player"] === 1) {
-        document.querySelector("#p1Bid").innerHTML = bid_dict["p1"];
         while (bid_dict["p1Bid"] < 0 || bid_dict["p1Bid"] > 13 || isNaN(bid_dict["p1Bid"]) === true) {
             bid_dict["p1Bid"] = parseInt(prompt("Please bid your hand b/w 0 and 13:"));
         }
@@ -684,16 +683,14 @@ function bid(bid_dict)
     }
 
     else {
-        document.querySelector("#p1Bid").innerHTML = bid_dict["p1"];
-
         bid_dict["p2Bid"] = comp_bid(bid_dict["p2"], bid_dict["p1Bid"]);
-        document.querySelector("#compBid").innerHTML = `Comp Bid: ${bid_dict["p2Bid"]}`;
 
         while (bid_dict["p1Bid"] < 0 || bid_dict["p1Bid"] > 13 || isNaN(bid_dict["p1Bid"]) === true) {
-            bid_dict["p1Bid"] = parseInt(prompt("Please bid your hand b/w 0 and 13:"));
+            bid_dict["p1Bid"] = parseInt(prompt(`Comp Bids: ${bid_dict["p2Bid"]}, please bid your hand b/w 0 and 13:`));
         }
 
         document.querySelector("#p1Bid").innerHTML = `Player 1 Bid: ${bid_dict["p1Bid"]}`;
+        document.querySelector("#compBid").innerHTML = `Comp Bid: ${bid_dict["p2Bid"]}`;
     }
 
     return bid_dict;
