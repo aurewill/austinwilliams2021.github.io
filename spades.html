@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>2-Player Spades</title>
+    </head>
+    <body>
+        <h2 id="p1Score"></h2>
+        <h2 id="p2Score"></h2>
+        <h3 id="alt"></h3>
+        <button onclick="NewTab()">
+            Rules
+        </button>
+        <button id="score" type="button">Score Round</button>
+        <button id="draw" type="button">Draw</button>
+        <button id="bid" type="button">Bid</button>
+        <button id="startHand" type="button">Start Hand</button>
+        <h3 id="p1Bid"></h3>
+        <h3 id="compBid"></h3>
+        <h3 id="p1"></h3>
+        <h3 id="p1Card"></h3>
+        <h3 id="p2Card"></h3>
+        <h3 id="p1Books"></h3>
+        <h3 id="p2Books"></h3>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
+        <script src="spades.js"></script>
+        <script>
+            function NewTab() {
+                alert("Max/Min Score (200/-250)  |  Nil (+100/-100)  |  5 Bags (-50)  |  2 Sets (GAME OVER)");
+            }
+        </script>
+    </body>
+</html>
+

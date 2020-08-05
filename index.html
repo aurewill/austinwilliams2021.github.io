@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <title>Welcome!</title>
+
+        <style>
+            .content {
+                max-width: 500px;
+                margin: auto;
+                padding: 10px;
+            }
+        </style>
+    </head>
+
+    <div class="content">
+        <body>
+            <table>
+                <tr>
+                    <h1>Welcome To 2-Player Spades</h1>
+                </tr>
+                <tr>
+                    <ul>
+                        <li>It's you against the computer. First to 200 points wins or first to -250 loses.</li>
+                        <li>Successful Nil is +100 points. Unsuccessful Nil is -100 points.</li>
+                        <li>5 bags is -50 points and bags rollover to enforce minimal underbidding.</li>
+                        <li>2 sets is a loss and each set brings you back what you bid.</li>
+                        <li>When drawing, if you pick the first card you see, the next card will be discarded.</li>
+                        <li>If you don't like that first card, the next card will automatically be added to your hand.</li>
+                        <br>
+                        <li>Note: When inputting cards in game play, enter card EXACTLY as it appears in your hand.</li>
+                    </ul>
+                </tr>
+                <tr>
+                    <td>
+                        <button onclick="NewTab()">
+                            Start Game!
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+            <script>
+                function NewTab() {
+                    window.open(
+                      "spades.html", "_blank");
+                }
+            </script>
+
+        </body>
+    </div>
+
+</html>
