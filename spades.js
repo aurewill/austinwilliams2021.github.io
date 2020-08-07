@@ -8,8 +8,8 @@ var COPYDECK1 = _.cloneDeep(DECK);
 var MASTERDICT = {"deck":COPYDECK1,"num_round":0,"spades_played":false,"p1":[],"p2":[],"p1Bid":-1,"p2Bid":-1,"p1Books":0,"p2Books":0,"p1Score":0,"p2Score":0,"p1Bags":0,"p2Bags":0,"p1Sets":0,"p2Sets":0,"d":0,"l":0,"player":1};
 
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelector("#p1Score").innerHTML = "P1 Score: 0 &nbsp;|&nbsp; Bags: 0 &nbsp;|&nbsp; Sets: 0";
-    document.querySelector("#p2Score").innerHTML = "P2 Score: 0 &nbsp;|&nbsp; Bags: 0 &nbsp;|&nbsp; Sets: 0";
+    document.querySelector("#p1Score").innerHTML = "USER Score: 0 &nbsp;|&nbsp; Bags: 0 &nbsp;|&nbsp; Sets: 0";
+    document.querySelector("#p2Score").innerHTML = "COMP Score: 0 &nbsp;|&nbsp; Bags: 0 &nbsp;|&nbsp; Sets: 0";
     document.querySelector("#alt").innerHTML = "Start the round by drawing your hand! Choose wisely...";
     main(MASTERDICT);
 });
@@ -23,15 +23,13 @@ function main(Dict)
             if (Dict["d"] < MAXSCORE && Dict["l"] > MINSCORE && Dict["p1Sets"] != 2 && Dict["p2Sets"] != 2)
             {
                 Dict = deal(Dict);
-                document.querySelector("#alt").innerHTML = "";
+                document.querySelector("#alt").innerHTML = "Draw 13 cards into your hand, then bid.";
+                document.querySelector("#p1Bid").innerHTML = "";
+                document.querySelector("#compBid").innerHTML = "";
                 document.querySelector("#p1Card").innerHTML = "";
                 document.querySelector("#p2Card").innerHTML = "";
                 document.querySelector("#p1Books").innerHTML = "";
                 document.querySelector("#p2Books").innerHTML = "";
-
-                if (Dict["p1"].length === 13) {
-                    document.querySelector("#alt").innerHTML = "Bid your hand!";
-                }
             }
         }
         else
@@ -49,6 +47,8 @@ function main(Dict)
         if (Dict["p1Bid"] === -1 && Dict["deck"].length === 0)
         {
             Dict = bid(Dict);
+            document.querySelector("#draw1").innerHTML = "";
+            document.querySelector("#draw2").innerHTML = "";
         }
         else if (Dict["p1Bid"] != -1 && Dict["deck"].length === 0)
         {
@@ -58,10 +58,17 @@ function main(Dict)
         if (Dict["deck"].length != 0 && Dict["p1"].length > 0 && Dict["p1"].length < 13) {
             document.querySelector("#alt").innerHTML = "Keep drawing until you have 13 cards in your hand.";
         }
+
+        if (Dict["deck"].length != 0 && Dict["p1"].length === 0 && Dict["d"] < MAXSCORE && Dict["l"] > MINSCORE) {
+            document.querySelector("#alt").innerHTML = "Draw 13 cards into your hand, then bid.";
+        }
     };
 
     document.querySelector("#startHand").onclick = function() {
         if (Dict["deck"].length === 0 && Dict["p1Bid"] != -1 && Dict["p1"].length != 0) {
+            document.querySelector("#draw1").innerHTML = "";
+            document.querySelector("#draw2").innerHTML = "";
+            document.querySelector("#alt").innerHTML = "Play until your hand is empty and you're ready to score.";
             Dict = game(Dict);
         }
 
@@ -72,12 +79,23 @@ function main(Dict)
         if (Dict["deck"].length === 0 && Dict["p1Bid"] === -1 && Dict["p1"].length === 13) {
             document.querySelector("#alt").innerHTML = "The deck is empty, please click the Bid button.";
         }
+
+        if (Dict["p1"].length === 0 && Dict["deck"].length === 0) {
+            document.querySelector("#alt").innerHTML = "Score the round!";
+            document.querySelector("#p1").innerHTML = "";
+        }
+
+        if (Dict["deck"].length != 0 && Dict["p1"].length === 0 && Dict["d"] < MAXSCORE && Dict["l"] > MINSCORE) {
+            document.querySelector("#alt").innerHTML = "Draw 13 cards into your hand, then bid.";
+        }
     };
 
     // SCORE //
     document.querySelector("#score").onclick = function() {
         if (Dict["p1"].length === 0 && Dict["deck"].length === 0) {
             Dict = score(Dict);
+            document.querySelector("#p1Card").innerHTML = "";
+            document.querySelector("#p2Card").innerHTML = "";
         }
 
         if (Dict["deck"].length != 0 && Dict["p1"].length > 0 && Dict["p1"].length < 13) {
@@ -96,30 +114,31 @@ function gameOver(final_dict)
 {
     if (final_dict["p1Sets"] === 2 && final_dict["p2Sets"] != 2)
     {
-        document.querySelector("#p1Score").innerHTML = "Computer WINS!";
+        document.querySelector("#p1Score").innerHTML = "COMP WINS";
     }
     else if (final_dict["p2Sets"] === 2 && final_dict["p1Sets"] != 2)
     {
-        document.querySelector("#p1Score").innerHTML = "Player 1 WINS!";
+        document.querySelector("#p1Score").innerHTML = "YOU WON";
     }
     else if (final_dict["p1Sets"] === 2 && final_dict["p2Sets"] === 2)
     {
-        document.querySelector("#p1Score").innerHTML = "TIE GAME!";
+        document.querySelector("#p1Score").innerHTML = "TIE GAME";
     }
     else if (final_dict["p1Score"] > final_dict["p2Score"])
     {
-        document.querySelector("#p1Score").innerHTML = "Player 1 WINS!";
+        document.querySelector("#p1Score").innerHTML = "YOU WON";
     }
     else if (final_dict["p2Score"] > final_dict["p1Score"])
     {
-        document.querySelector("#p1Score").innerHTML = "Player 2 WINS!";
+        document.querySelector("#p1Score").innerHTML = "COMP WINS";
     }
     else
     {
-        document.querySelector("#p1Score").innerHTML = "TIE GAME!";
+        document.querySelector("#p1Score").innerHTML = "TIE GAME";
     }
 
-    document.querySelector("#p2Score").innerHTML = `P1 Score: ${final_dict["p1Score"]} | Bags: ${final_dict["p1Bags"]} | Sets: ${final_dict["p1Sets"]} &nbsp;&&nbsp;  P2 Score: ${final_dict["p2Score"]} | Bags: ${final_dict["p2Bags"]} | Sets: ${final_dict["p2Sets"]}`;
+    document.querySelector("#p2Score").innerHTML = `USER Score: ${final_dict["p1Score"]} | Bags: ${final_dict["p1Bags"]} | Sets: ${final_dict["p1Sets"]}`;
+    document.querySelector("#altScore").innerHTML = `COMP Score: ${final_dict["p2Score"]} | Bags: ${final_dict["p2Bags"]} | Sets: ${final_dict["p2Sets"]}`;
     document.querySelector("#alt").innerHTML = "Reload the page to play again!";
 }
 
@@ -196,8 +215,8 @@ function score(score_dict)
         score_dict["p2Books"] = 0;
 
         if (score_dict["d"] < MAXSCORE && score_dict["l"] > MINSCORE && score_dict["p1Sets"] != 2 && score_dict["p2Sets"] != 2) {
-            document.querySelector("#p1Score").innerHTML = `P1 Score: ${score_dict["p1Score"]} &nbsp;|&nbsp; Bags: ${score_dict["p1Bags"]} &nbsp;|&nbsp; Sets: ${score_dict["p1Sets"]}`;
-            document.querySelector("#p2Score").innerHTML = `P2 Score: ${score_dict["p2Score"]} &nbsp;|&nbsp; Bags: ${score_dict["p2Bags"]} &nbsp;|&nbsp; Sets: ${score_dict["p2Sets"]}`;
+            document.querySelector("#p1Score").innerHTML = `USER Score: ${score_dict["p1Score"]} &nbsp;|&nbsp; Bags: ${score_dict["p1Bags"]} &nbsp;|&nbsp; Sets: ${score_dict["p1Sets"]}`;
+            document.querySelector("#p2Score").innerHTML = `COMP Score: ${score_dict["p2Score"]} &nbsp;|&nbsp; Bags: ${score_dict["p2Bags"]} &nbsp;|&nbsp; Sets: ${score_dict["p2Sets"]}`;
             document.querySelector("#alt").innerHTML = "Draw and play another round!";
         }
         else {
@@ -391,10 +410,10 @@ function game(game_dict)
             game_dict["player"] = 2;
         }
 
-        document.querySelector("#p1Card").innerHTML = `P1 plays: ${cardOne}`;
-        document.querySelector("#p2Card").innerHTML = `P2 plays: ${cardTwo}`;
-        document.querySelector("#p1Books").innerHTML = `P1 Books: ${game_dict["p1Books"]}`;
-        document.querySelector("#p2Books").innerHTML = `P2 Books: ${game_dict["p2Books"]}`;
+        document.querySelector("#p1Card").innerHTML = `USER plays: ${cardOne}`;
+        document.querySelector("#p2Card").innerHTML = `COMP plays: ${cardTwo}`;
+        document.querySelector("#p1Books").innerHTML = `USER Books: ${game_dict["p1Books"]}`;
+        document.querySelector("#p2Books").innerHTML = `COMP Books: ${game_dict["p2Books"]}`;
 
         let pos1 = game_dict["p1"].indexOf(cardOne);
         let pos2 = game_dict["p2"].indexOf(cardTwo);
@@ -402,7 +421,7 @@ function game(game_dict)
         game_dict["p1"].splice(pos1, 1);
         game_dict["p2"].splice(pos2, 1);
 
-        document.querySelector("#p1").innerHTML = `P1: ${game_dict["p1"]}`;
+        document.querySelector("#p1").innerHTML = `USER: ${game_dict["p1"]}`;
 
     }
 
@@ -505,12 +524,12 @@ function game(game_dict)
             cardOne = good_card;
         }
 
-        alert(`Computer plays: ${cardOne}`);
+        alert(`COMP plays: ${cardOne}`);
 
         // Player 1 follows
-        cardTwo = prompt(`Your turn to play a card, Comp: ${cardOne}`);
+        cardTwo = prompt(`Your turn to play a card, COMP: ${cardOne}`);
         while (cardTwo === "" || game_dict["p1"].indexOf(cardTwo) === -1) {
-            cardTwo = prompt(`Please enter a card in your hand, Comp: ${cardOne}`);
+            cardTwo = prompt(`Please enter a card in your hand, COMP: ${cardOne}`);
         }
         let lead_suit = cardOne.charAt(0);
         let good_play = false;
@@ -518,7 +537,7 @@ function game(game_dict)
         while (good_play === false) {
             // CASE 1: User input matches lead_suit
             if (cardTwo.charAt(0) === lead_suit && game_dict["p1"].indexOf(cardTwo) === -1) {
-                cardTwo = prompt(`Please enter your card correctly, Comp: ${cardOne}`);
+                cardTwo = prompt(`Please enter your card correctly, COMP: ${cardOne}`);
                 if (cardTwo.charAt(0) === lead_suit && game_dict["p1"].indexOf(cardTwo) != -1) {
                     good_play === true;
                 }
@@ -551,10 +570,10 @@ function game(game_dict)
                     if (spade_able === false) {
                         while (true) {
                             if (cardTwo.charAt(0) != lead_suit) {
-                                cardTwo = prompt(`Please follow suit, Comp: ${cardOne}`);
+                                cardTwo = prompt(`Please follow suit, COMP: ${cardOne}`);
                             }
                             else if (game_dict["p1"].indexOf(cardTwo) === -1) {
-                                cardTwo = prompt(`Please enter your card correctly, Comp: ${cardOne}`);
+                                cardTwo = prompt(`Please enter your card correctly, COMP: ${cardOne}`);
                             }
                             else {
                                 good_play = true;
@@ -588,10 +607,10 @@ function game(game_dict)
                 else {
                     while (true) {
                         if (cardTwo.charAt(0) != lead_suit) {
-                            cardTwo = prompt(`Please follow suit, Comp: ${cardOne}`);
+                            cardTwo = prompt(`Please follow suit, COMP: ${cardOne}`);
                         }
                         else if (game_dict["p1"].indexOf(cardTwo) === -1) {
-                            cardTwo = prompt(`Please enter your card correctly, Comp: ${cardOne}`);
+                            cardTwo = prompt(`Please enter your card correctly, COMP: ${cardOne}`);
                         }
                         else {
                             good_play = true;
@@ -620,10 +639,10 @@ function game(game_dict)
                 else {
                     while (true) {
                         if (cardTwo.charAt(0) != lead_suit) {
-                            cardTwo = prompt(`Please follow suit, Comp: ${cardOne}`);
+                            cardTwo = prompt(`Please follow suit, COMP: ${cardOne}`);
                         }
                         else if (game_dict["p1"].indexOf(cardTwo) === -1) {
-                            cardTwo = prompt(`Please enter your card correctly, Comp: ${cardOne}`);
+                            cardTwo = prompt(`Please enter your card correctly, COMP: ${cardOne}`);
                         }
                         else {
                             good_play = true;
@@ -645,10 +664,10 @@ function game(game_dict)
             game_dict["player"] = 1;
         }
 
-        document.querySelector("#p1Card").innerHTML = `P1 plays: ${cardTwo}`;
-        document.querySelector("#p2Card").innerHTML = `P2 plays: ${cardOne}`;
-        document.querySelector("#p1Books").innerHTML = `P1 Books: ${game_dict["p1Books"]}`;
-        document.querySelector("#p2Books").innerHTML = `P2 Books: ${game_dict["p2Books"]}`;
+        document.querySelector("#p1Card").innerHTML = `USER plays: ${cardTwo}`;
+        document.querySelector("#p2Card").innerHTML = `COMP plays: ${cardOne}`;
+        document.querySelector("#p1Books").innerHTML = `USER Books: ${game_dict["p1Books"]}`;
+        document.querySelector("#p2Books").innerHTML = `COMP Books: ${game_dict["p2Books"]}`;
 
         let pos1 = game_dict["p1"].indexOf(cardTwo);
         let pos2 = game_dict["p2"].indexOf(cardOne);
@@ -656,7 +675,7 @@ function game(game_dict)
         game_dict["p1"].splice(pos1, 1);
         game_dict["p2"].splice(pos2, 1);
 
-        document.querySelector("#p1").innerHTML = `P1: ${game_dict["p1"]}`;
+        document.querySelector("#p1").innerHTML = `USER: ${game_dict["p1"]}`;
 
     }
 
@@ -682,19 +701,19 @@ function bid(bid_dict)
 
         bid_dict["p2Bid"] = comp_bid(bid_dict["p2"], bid_dict["p1Bid"]);
 
-        document.querySelector("#p1Bid").innerHTML = `Player 1 Bid: ${bid_dict["p1Bid"]}`;
-        document.querySelector("#compBid").innerHTML = `Comp Bid: ${bid_dict["p2Bid"]}`;
+        document.querySelector("#p1Bid").innerHTML = `USER Bid: ${bid_dict["p1Bid"]}`;
+        document.querySelector("#compBid").innerHTML = `COMP Bid: ${bid_dict["p2Bid"]}`;
     }
 
     else {
         bid_dict["p2Bid"] = comp_bid(bid_dict["p2"], bid_dict["p1Bid"]);
 
         while (bid_dict["p1Bid"] < 0 || bid_dict["p1Bid"] > 13 || isNaN(bid_dict["p1Bid"]) === true) {
-            bid_dict["p1Bid"] = parseInt(prompt(`Comp Bids: ${bid_dict["p2Bid"]}, please bid your hand b/w 0 and 13:`));
+            bid_dict["p1Bid"] = parseInt(prompt(`COMP Bids: ${bid_dict["p2Bid"]}, please bid your hand b/w 0 and 13:`));
         }
 
-        document.querySelector("#p1Bid").innerHTML = `Player 1 Bid: ${bid_dict["p1Bid"]}`;
-        document.querySelector("#compBid").innerHTML = `Comp Bid: ${bid_dict["p2Bid"]}`;
+        document.querySelector("#p1Bid").innerHTML = `USER Bid: ${bid_dict["p1Bid"]}`;
+        document.querySelector("#compBid").innerHTML = `COMP Bid: ${bid_dict["p2Bid"]}`;
     }
 
     return bid_dict;
@@ -784,29 +803,29 @@ function deal(deal_dict)
         if (confirm(`Do you want this card: ${deal_dict["deck"][pos]}`))
         {
             deal_dict["p1"].push(deal_dict["deck"][pos]);
-            document.querySelector("#p1Bid").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
+            document.querySelector("#draw1").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
             deal_dict["deck"].splice(pos,1);
 
             pos = Math.floor(Math.random() * (deal_dict["deck"].length - 1));
-            document.querySelector("#compBid").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
+            document.querySelector("#draw2").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
             deal_dict["deck"].splice(pos,1);
 
             deal_dict["p1"].sort();
-            document.querySelector("#p1").innerHTML = `Player 1: ${deal_dict["p1"]}`;
+            document.querySelector("#p1").innerHTML = `USER: ${deal_dict["p1"]}`;
         }
 
         else
         {
-            document.querySelector("#p1Bid").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
+            document.querySelector("#draw1").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
             deal_dict["deck"].splice(pos,1);
 
             pos = Math.floor(Math.random() * (deal_dict["deck"].length - 1));
             deal_dict["p1"].push(deal_dict["deck"][pos]);
-            document.querySelector("#compBid").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
+            document.querySelector("#draw2").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
             deal_dict["deck"].splice(pos,1);
 
             deal_dict["p1"].sort();
-            document.querySelector("#p1").innerHTML = `Player 1: ${deal_dict["p1"]}`;
+            document.querySelector("#p1").innerHTML = `USER: ${deal_dict["p1"]}`;
         }
 
         // Comp picks card
@@ -862,29 +881,29 @@ function deal(deal_dict)
         if (confirm(`Do you want this card: ${deal_dict["deck"][pos]}`))
         {
             deal_dict["p1"].push(deal_dict["deck"][pos]);
-            document.querySelector("#p1Bid").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
+            document.querySelector("#draw1").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
             deal_dict["deck"].splice(pos,1);
 
             pos = Math.floor(Math.random() * (deal_dict["deck"].length - 1));
-            document.querySelector("#compBid").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
+            document.querySelector("#draw2").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
             deal_dict["deck"].splice(pos,1);
 
             deal_dict["p1"].sort();
-            document.querySelector("#p1").innerHTML = `Player 1: ${deal_dict["p1"]}`;
+            document.querySelector("#p1").innerHTML = `USER: ${deal_dict["p1"]}`;
         }
 
         else
         {
-            document.querySelector("#p1Bid").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
+            document.querySelector("#draw1").innerHTML = `${deal_dict["deck"][pos]} has been discarded.`;
             deal_dict["deck"].splice(pos,1);
 
             pos = Math.floor(Math.random() * (deal_dict["deck"].length - 1));
             deal_dict["p1"].push(deal_dict["deck"][pos]);
-            document.querySelector("#compBid").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
+            document.querySelector("#draw2").innerHTML = `${deal_dict["deck"][pos]} is now in your hand.`;
             deal_dict["deck"].splice(pos,1);
 
             deal_dict["p1"].sort();
-            document.querySelector("#p1").innerHTML = `Player 1: ${deal_dict["p1"]}`;
+            document.querySelector("#p1").innerHTML = `USER: ${deal_dict["p1"]}`;
         }
     }
 

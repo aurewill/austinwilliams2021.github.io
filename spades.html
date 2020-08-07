@@ -4,13 +4,16 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="styles.css">
         <title>2-Player Spades</title>
     </head>
-    <body>
-        <h2 id="p1Score"></h2>
-        <h2 id="p2Score"></h2>
-        <h3 style="color:red" id="alt"></h3>
-        <h3 style="color:green" id="p1"></h3>
+
+    <body class="content" id="spadesBody">
+        <h2 class="p1" id="p1Score"></h2>
+        <h2 class="comp" id="p2Score"></h2>
+        <h2 class="comp" id="altScore"></h2>
+        <h3 id="alt"></h3>
+        <h3 class="p1" id="p1"></h3>
         <button onclick="NewTab()">
             Rules
         </button>
@@ -18,12 +21,30 @@
         <button id="draw" type="button">Draw</button>
         <button id="bid" type="button">Bid</button>
         <button id="startHand" type="button">Start Hand</button>
-        <h3 id="p1Bid"></h3>
-        <h3 id="compBid"></h3>
-        <h3 id="p1Card"></h3>
-        <h3 id="p2Card"></h3>
-        <h3 id="p1Books"></h3>
-        <h3 id="p2Books"></h3>
+        <h3 class="p1" id="draw1"></h3>
+        <h3 class="p1" id="draw2"></h3>
+        <h3 class="p1" id="p1Card" class="play"></h3>
+        <h3 class="comp" id="p2Card" class="play"></h3>
+
+        <table>
+            <tr>
+                <td class="tableLeft">
+                    <h3 class="p1" id="p1Books"></h3>
+                </td>
+                <td class="tableRight">
+                    <h3 class="p1" id="p1Bid"></h3>
+                </td>
+            </tr>
+            <tr>
+                <td class="tableLeft">
+                    <h3 class="comp" id="p2Books"></h3>
+                </td>
+                <td class="tableRight">
+                    <h3 class="comp" id="compBid"></h3>
+                </td>
+            </tr>
+        </table>
+
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.19/lodash.min.js"></script>
         <script src="spades.js"></script>
         <script>
@@ -32,5 +53,6 @@
             }
         </script>
     </body>
+
 </html>
 
