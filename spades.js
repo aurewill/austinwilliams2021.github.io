@@ -114,7 +114,7 @@ function gameOver(final_dict)
 {
     if (final_dict["p1Sets"] === 2 && final_dict["p2Sets"] != 2)
     {
-        document.querySelector("#p1Score").innerHTML = "COMP WINS";
+        document.querySelector("#p1Score").innerHTML = "YOU LOST";
     }
     else if (final_dict["p2Sets"] === 2 && final_dict["p1Sets"] != 2)
     {
@@ -122,7 +122,7 @@ function gameOver(final_dict)
     }
     else if (final_dict["p1Sets"] === 2 && final_dict["p2Sets"] === 2)
     {
-        document.querySelector("#p1Score").innerHTML = "TIE GAME";
+        document.querySelector("#p1Score").innerHTML = "TIE";
     }
     else if (final_dict["p1Score"] > final_dict["p2Score"])
     {
@@ -130,11 +130,11 @@ function gameOver(final_dict)
     }
     else if (final_dict["p2Score"] > final_dict["p1Score"])
     {
-        document.querySelector("#p1Score").innerHTML = "COMP WINS";
+        document.querySelector("#p1Score").innerHTML = "YOU LOST";
     }
     else
     {
-        document.querySelector("#p1Score").innerHTML = "TIE GAME";
+        document.querySelector("#p1Score").innerHTML = "TIE";
     }
 
     document.querySelector("#p2Score").innerHTML = `USER Score: ${final_dict["p1Score"]} | Bags: ${final_dict["p1Bags"]} | Sets: ${final_dict["p1Sets"]}`;
