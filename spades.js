@@ -28,6 +28,10 @@ function main(Dict)
                 document.querySelector("#p2Card").innerHTML = "";
                 document.querySelector("#p1Books").innerHTML = "";
                 document.querySelector("#p2Books").innerHTML = "";
+
+                if (Dict["p1"].length === 13) {
+                    document.querySelector("#alt").innerHTML = "Bid your hand!";
+                }
             }
         }
         else
