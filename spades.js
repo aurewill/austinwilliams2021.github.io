@@ -308,6 +308,8 @@ function bid(bid_dict)
         document.querySelector("#compBid").innerHTML = `COMP Bid: ${bid_dict["p2Bid"]}`;
     }
 
+    document.querySelector("#alt").innerHTML = "You've placed your bid, click the Start Hand button!";
+
     return bid_dict;
 }
 
